@@ -1,14 +1,14 @@
-#include <stdio.h>
-
+п»ї#include <stdio.h>
 
 double findMaxInt(int id, ...) {
 	double sum;
-	//проход по всему списку параметров, до тех пор пока не встретим признак окончания последовательности
 	int *ptr = &id;
+	//РїСЂРѕС…РѕРґ РїРѕ РІСЃРµРјСѓ СЃРїРёСЃРєСѓ РїР°СЂР°РјРµС‚СЂРѕРІ, РґРѕ С‚РµС… РїРѕСЂ РїРѕРєР° РЅРµ РІСЃС‚СЂРµС‚РёРј РїСЂРёР·РЅР°Рє РѕРєРѕРЅС‡Р°РЅРёСЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё 0
 	for (sum = 0; (*ptr) != 0;) {
 		switch (*ptr++) {
 			case 1:
-				sum += *ptr++;
+				sum += *ptr;
+				ptr++;
 				break;
 			case 2:
 				sum += *((long*)ptr);
@@ -26,10 +26,10 @@ double findMaxInt(int id, ...) {
 }
 
 void test() {
-	printf("%f\n", findMaxInt(1, 3, 1, 1, 1, -1, 0)); //3
-	printf("%f\n", findMaxInt(2, 3, 2, 1, 2, -1, 0));
-	printf("%f\n", findMaxInt(3, 2.0, 3, 1.4, 3, 15.8, 0));
-	printf("%f\n", findMaxInt(1, 2, 3, 1.4, 2, 15, 0));
+	printf("test1: %f == 3\n", findMaxInt(1, 3, 1, 1, 1, -1, 0) ); //3
+	printf("test2: %f == 315\n", findMaxInt(2, 5, 2, 506, 2, -196, 0, 1, 2)); //315
+	printf("test3: %f == 22.1\n", findMaxInt(3, 2.0, 3, 1.4, 3, 15.8, 3, 2.9, 0)); //22.1
+	printf("test4: %f == 156.4\n", findMaxInt(1, 5, 3, 1.4, 2, 150, 0)); //156.4
 }
 
 int main() {
