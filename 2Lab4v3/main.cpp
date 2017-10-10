@@ -1,35 +1,38 @@
 ﻿#include <stdio.h>
+#include <stdarg.h>
 
-double sumOfRange(int id, ...) {
-	double sum;
-	int *ptr = &id;
+long double sumOfRange(int terminator, ...) {
+	long double sum;
+	va_list valist; //структура, хранящая в себе список аргументов
+	va_start(valist, terminator);  //инициализация списка аргументов
 	//проход по всему списку параметров, до тех пор пока не встретим признак окончания последовательности 0
-	for (sum = 0; (*ptr) != 0;) {
-		switch (*ptr++) {
+	int id = va_arg(valist, int); //макрос берет дополнительный аргумент из списка (1-ый параметр), приводя его к необходимому типу (2-й параметр)
+	for (sum = 0; id != 0; id = va_arg(valist, int)) {
+		switch (id) {
 			case 1:
-				sum += *ptr;
-				ptr++;
+				sum += va_arg(valist, int);
 				break;
 			case 2:
-				sum += *((long*)ptr);
-				ptr++;
+				sum += va_arg(valist, long);
 				break;
 			case 3:
-				sum += *((double*)ptr);
-				ptr++;
+				sum += va_arg(valist, double);
 				break;
 			default:
 				break;
 		}
 	}
+	va_end(valist); //очистка памяти списка аргументов
 	return sum;
 }
 
 void test() {
-	printf("test1: %f == 3\n", sumOfRange(1, 3, 1, 1, 1, -1, 0) ); //3
-	printf("test2: %f == 315\n", sumOfRange(2, 5, 2, 506, 2, -196, 0, 1, 2)); //315
-	printf("test3: %f == 22.1\n", sumOfRange(3, 2.0, 3, 1.4, 3, 15.8, 3, 2.9, 0)); //22.1
-	printf("test4: %f == 156.4\n", sumOfRange(1, 5, 3, 1.4, 2, 150, 0)); //156.4
+	printf("test1: %Lf == 3\n", sumOfRange(0, 1, 3, 1, 1, 1, -1, 0) ); //3
+	printf("test2: %Lf == 315\n", sumOfRange(0, 2, 5, 2, 506, 2, -196, 0, 1, 2)); //315
+	printf("test3: %Lf == 22.1\n", sumOfRange(0, 3, 2.0, 3, 1.4, 3, 15.8, 3, 2.9, 0)); //22.1
+	printf("test4: %Lf == 156.4\n", sumOfRange(0, 1, 5, 3, 1.4, 2, 150, 0)); //156.4
+	printf("test5: %Lf == -10.0\n", sumOfRange(0, 1, 3, 3, -3.0, 3, -1.0, 3, -9.0, 0)); //-10
+	printf("test6: %Lf == -10.3\n", sumOfRange(0, 1, 3, 3, -3.2, 3, -1.1, 3, -9.0, 0)); //-10.3
 }
 
 int main() {
